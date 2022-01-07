@@ -10,43 +10,25 @@ using namespace std;
 
 class Solution{
     public:
-    void printPath(vector<vector<int>> &nums, vector<vector<int>> &visited, 
-    vector<string> &ans, string move, int n, int i, int j){
+    void printPaths(vector<vector<int>> &maze, vector<string> &ans, vector<vector<int>> &visited, string path, int n, int i, int j){
+        if(i > n-1 || i < 0 || j > n-1 || j < 0) return;
         if(i == n-1 && j == n-1){
-            ans.push_back(move);
+            ans.push_back(path);
             return;
         }
-        //downward
-        if(i+1 <n && !visited[i+1][j] && nums[i+1][j]){
-            visited[i][j] = 1;
-            printPath(nums, visited, ans, move+'D', n, i+1, j);
-            visited[i][j] = 0;
-        }
-        //leftwards
-        if(j-1 >= 0 && !visited[i][j-1] && nums[i][j-1]){
-            visited[i][j] = 1;
-            printPath(nums, visited, ans, move+'L', n, i, j-1);
-            visited[i][j] = 0;
-        }
-        //rightwards
-        if(j+1 < n && !visited[i][j+1] && nums[i][j+1]){
-            visited[i][j] = 1;
-            printPath(nums, visited, ans, move+'R', n, i, j+1);
-            visited[i][j] = 0;
-        }
-        //upwards
-        if(i-1 >= 0 && !visited[i-1][j] && nums[i-1][j]){
-            visited[i][j] = 1;
-            printPath(nums, visited, ans, move+'U', n, i-1, j);
-            visited[i][j] = 0;
-        }
+        if(visited[i][j] == 1 || maze[i][j] == 0) return;
+        visited[i][j] = 1;
+        printPaths(maze, ans, visited, path+'D', n, i+1, j);
+        printPaths(maze, ans, visited, path+'L', n, i, j-1);
+        printPaths(maze, ans, visited, path+'R', n, i, j+1);
+        printPaths(maze, ans, visited, path+'U', n, i-1, j);
+        visited[i][j] = 0;
     }
     vector<string> findPath(vector<vector<int>> &m, int n) {
         vector<string> ans;
-        vector<vector<int>> visited(n, vector<int> (n, 0));
-        if(m[0][0] == 1){
-            printPath(m, visited, ans, "", n, 0, 0);
-        }
+        vector<vector<int>> visited(n, vector<int>(n,0));
+        if(m[0][0] == 0 || m[n-1][n-1] == 0) return ans;
+        printPaths(m, ans, visited, "", n, 0, 0);
         return ans;
     }
 };

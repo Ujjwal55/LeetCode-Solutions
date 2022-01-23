@@ -16,10 +16,24 @@ public:
         }
         return dp[n-1];
     }
+    int bottomUpOptimised(vector<int> &nums, int n, vector<int> &dp){
+        int prev = nums[0];
+        int prev2 = 0;
+        for(int i = 1 ; i < n ; i++){
+            int opt1 = nums[i];
+            if(i > 1) opt1 += prev2;
+            int opt2 = prev;
+            int curr = max(opt1, opt2);
+            prev2 = prev;
+            prev = curr;
+        }
+        return prev;
+    }
     int rob(vector<int>& nums) {
         int n = nums.size();
         vector<int> dp(n+1, -1);
         // return maxAmount(nums, n-1, dp);
-        return bottomUp(nums, n, dp);
+        // return bottomUp(nums, n, dp);
+        return bottomUpOptimised(nums, n, dp);
     }
 };

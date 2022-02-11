@@ -11,16 +11,14 @@
  */
 class Solution {
 public:
-    bool nodesSum(TreeNode *root, int targetSum, TreeNode *prevNode){
-        if(targetSum == 0 && root == NULL && prevNode->left == NULL && prevNode->right == NULL)  return true;
+    bool pathSum(TreeNode *root, int currSum, int targetSum){
         if(root == NULL) return false;
-        // if(leftSum == true || rightSum == true) return true;
-        return (nodesSum(root->left, targetSum-root->val, root) || nodesSum(root->right, targetSum-root->val, root));
+        if(!root->left && !root->right){
+            return currSum + root->val == targetSum;
+        }
+        return pathSum(root->left, currSum+root->val, targetSum) || pathSum(root->right, currSum+root->val, targetSum);
     }
     bool hasPathSum(TreeNode* root, int targetSum) {
-        if(root == NULL) return false;
-        if(root->val == targetSum && root->left == NULL && root->right == NULL) return true;
-        TreeNode *firstNode = root;
-        return nodesSum(root, targetSum, firstNode);
+        return pathSum(root, 0, targetSum);
     }
 };

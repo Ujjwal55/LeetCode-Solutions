@@ -20,7 +20,7 @@ class Solution {
         vector<bool> visited(V, false);
         for(int i = 0 ; i < V ; i++){
             if(!visited[i]){
-                if(checkCycle(i, -1, adj, visited)) return true;
+               if(checkCycle(i, -1, adj, visited)) return true;
             }
         }
         return false;

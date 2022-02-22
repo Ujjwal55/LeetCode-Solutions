@@ -5,13 +5,22 @@ using namespace std;
  // } Driver Code Ends
 class Solution {
   public:
-  bool checkCycle(int node, int parent, vector<int> adj[], vector<bool> &visited){
+  bool checkCycleBFS(int node, int parent, vector<int> adj[], vector<bool> &visited){
+      queue<pair<int, int>> q;
+      q.push({node, -1});
       visited[node] = true;
-      for(auto nbr: adj[node]){
-          if(!visited[nbr]){
-              if(checkCycle(nbr, node, adj, visited)) return true;
+      while(!q.empty()){
+          auto curr = q.front();
+          parent = curr.second;
+          node = curr.first;
+          q.pop();
+          for(auto nbr: adj[curr.first]){
+              if(!visited[nbr]){
+                  visited[nbr] = true;
+                  q.push({nbr, curr.first});
+              }
+              else if(nbr != parent) return true;
           }
-          else if(nbr != parent) return true;
       }
       return false;
   }
@@ -20,7 +29,7 @@ class Solution {
         vector<bool> visited(V, false);
         for(int i = 0 ; i < V ; i++){
             if(!visited[i]){
-               if(checkCycle(i, -1, adj, visited)) return true;
+                if(checkCycleBFS(i, -1, adj, visited)) return true;
             }
         }
         return false;

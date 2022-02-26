@@ -17,16 +17,45 @@ class Solution {
       dfsvisited[node] = false;
       return false;
   }
+  bool checkCycleBFS(int V, vector<int> adj[]){
+      vector<int> indegree(V, 0);
+      for(int i = 0 ; i < V ; i++){
+          for(auto nbr: adj[i]){
+              indegree[nbr]++;
+          }
+      }
+      queue<int> q;
+      for(int i = 0 ; i < V ; i++){
+          if(indegree[i] == 0){
+              q.push(i);
+          }
+      }
+      int check = 0;
+      while(!q.empty()){
+          int curr = q.front();
+          q.pop();
+          check++;
+          for(auto nbr: adj[curr]){
+              indegree[nbr]--;
+              if(indegree[nbr] == 0){
+                  q.push(nbr);
+              }
+          }
+      }
+      if(check == V) return false;
+      return true;
+  }
     // Function to detect cycle in a directed graph.
     bool isCyclic(int V, vector<int> adj[]) {
         vector<bool> visited(V, false);
         vector<bool> dfsvisited(V, false);
-        for(int i = 0 ; i < V ; i++){
-            if(!visited[i]){
-                if(checkCycle(i, adj, visited, dfsvisited)) return true;
-            }
-        }
-        return false;
+        // for(int i = 0 ; i < V ; i++){
+        //     if(!visited[i]){
+        //         if(checkCycle(i, adj, visited, dfsvisited)) return true;
+        //     }
+        // }
+        // return false;
+        return checkCycleBFS(V, adj);
     }
 };
 

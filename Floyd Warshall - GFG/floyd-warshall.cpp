@@ -11,27 +11,14 @@ class Solution {
   public:
 	void shortest_distance(vector<vector<int>>&matrix){
 	    int V = matrix.size();
-	    int costs[V][V];
-	    
-	    for(int i = 0 ; i < V ; i++){
-	        for(int j = 0 ; j < V ; j++){
-	            costs[i][j] = matrix[i][j];
-	        }
-	    }
 	    
 	    for(int i = 0 ; i < V ; i++){
 	        for(int j = 0 ; j < V ; j++){
 	            for(int k = 0 ; k < V ; k++){
-	                if(costs[j][i] == -1 || costs[i][k] == -1) continue;
-	                if(costs[j][k] == -1) costs[j][k] = costs[j][i] + costs[i][k];
-	                else costs[j][k] = min(costs[j][k], costs[j][i] + costs[i][k]);
+	                if(matrix[j][i] == -1 || matrix[i][k] == -1) continue;
+	                if(matrix[j][k] == -1) matrix[j][k] = matrix[j][i] + matrix[i][k];
+	                else matrix[j][k] = min(matrix[j][k], matrix[j][i] + matrix[i][k]);
 	            }
-	        }
-	    }
-	    
-	    for(int i = 0 ; i < V ; i++){
-	        for(int j = 0 ; j < V ; j++){
-	            matrix[i][j] = costs[i][j];
 	        }
 	    }
 	}

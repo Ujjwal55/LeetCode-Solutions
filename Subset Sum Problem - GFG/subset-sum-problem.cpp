@@ -19,10 +19,10 @@ bool subsetSum(int arr[], int n, int sum, vector<vector<int>> &dp){
     if(dp[n][sum] != -1){
         return dp[n][sum];
     }
-    // if(arr[n-1] <= sum){
-    //     if(subsetSum(arr, n-1, sum-arr[n-1])) return true;
-    // }
-    return dp[n][sum] = subsetSum(arr, n-1, sum-arr[n-1],dp) || subsetSum(arr, n-1, sum, dp);
+    if(arr[n-1] <= sum){
+        if(subsetSum(arr, n-1, sum-arr[n-1], dp)) return dp[n][sum] = true;
+    }
+    return dp[n][sum] = subsetSum(arr, n-1, sum, dp);
     // return subsetSum(arr, n-1, sum);
 }
 bool bottomUp(int arr[], int n, int sum){

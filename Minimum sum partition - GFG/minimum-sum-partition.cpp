@@ -18,11 +18,7 @@ class Solution{
         int sum = 0;
         for(int i = 0 ; i < n ; i++) sum+=arr[i];
         vector<vector<bool>> dp(n+1, vector<bool>(sum+1, false));
-        for(int i = 0 ; i <= n ; i++){
-            for(int j = 0 ; j <= sum ; j++){
-                if(j == 0) dp[i][j] = true;
-            }
-        }
+        for(int i = 0 ; i <= n ; i++) dp[i][0] = true;
         for(int i = 1 ; i <= n ; i++){
             for(int j = 1 ; j <= sum ; j++){
                 if(arr[i-1] <= j){

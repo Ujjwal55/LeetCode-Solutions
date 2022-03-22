@@ -6,15 +6,19 @@ using namespace std;
 class Solution{
     public:
     #define mod 1000000007
-	int countOfSubsets(int arr[], int i, int sum, vector<vector<long long>> &dp){
+	int countOfSubsets(vector<int> &arr, int i, int sum, vector<vector<long long>> &dp){
 	   // if(sum < 0) return 0;
 	   // if(sum == 0) return 1;
-	    if(i < 0) return 0;
-	    if(i == 0 && sum != 0) return 0;
-	    if(i == 0 and sum == 0) return 1;
+	   // if(i < 0) return 0;
+	   // if(i == 0 && sum != 0) return 0;
+	   // if(i == 0 and sum == 0) return 1;
+	    if(sum == 0) return 1;
+	    if(i == 0){
+	        return arr[0] == sum;
+	    }
 	    if(dp[i][sum] != -1) return dp[i][sum];
-	    if(arr[i-1] <= sum){
-	        return dp[i][sum] = (countOfSubsets(arr, i-1, sum-arr[i-1], dp) + countOfSubsets(arr, i-1, sum, dp))%mod;
+	    if(arr[i] <= sum){
+	        return dp[i][sum] = (countOfSubsets(arr, i-1, sum-arr[i], dp) + countOfSubsets(arr, i-1, sum, dp))%mod;
 	    }
 	    return dp[i][sum] = countOfSubsets(arr, i-1, sum, dp)%mod; 
 	}
@@ -45,9 +49,20 @@ class Solution{
 	}
 	int perfectSum(int arr[], int n, int sum)
 	{
+	    int zero = 0;
+	    vector<int> ar;
+	    int k = 0;
+	    for(int i = 0 ; i < n ; i++){
+	        if(arr[i] == 0) zero++;
+	        else{
+	            ar.push_back(arr[i]);
+	            k++;
+	        }
+	    }
 	    vector<vector<long long>> dp(n+1, vector<long long> (sum+1, -1));
-	   // return countOfSubsets(arr, n, sum, dp);
-	   return bottomUp(arr, n, sum);
+	    return pow(2, zero) * countOfSubsets(ar, k-1, sum, dp);
+	   //return bottomUp(arr, n-1, sum);
+	   
 	}
 	  
 };

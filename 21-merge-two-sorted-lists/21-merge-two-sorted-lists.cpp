@@ -11,40 +11,28 @@
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        if(l1 == NULL){
-            return l2;
-        }
-        if(l2 == NULL){
-            return l1;
-        }
-        ListNode *temp = new ListNode(-101);
-        ListNode *head = temp;
-        while(l1 and l2){
-            if(l1-> val < l2->val){
-                ListNode *newNode = new ListNode(l1->val);
-                temp->next = newNode;
-                temp = temp->next;
-                l1 = l1->next;
+        if(!l1) return l2;
+        if(!l2) return l1;
+        ListNode *temp1 = l1, *temp2 = l2;
+        ListNode *a = NULL;
+        ListNode *prev = NULL;
+        while(l1 && l2){
+            if(l1->val <= l2->val){
+                while(l1 && l1->val <= l2->val){
+                    prev = l1;
+                    l1 = l1->next;
+                }
+                prev->next = l2;
             }
             else{
-                ListNode *newNode = new ListNode(l2->val);
-                temp->next = newNode;
-                temp = temp->next;
-                l2 = l2->next;
+                while(l2 && l2->val < l1->val){
+                    prev = l2;
+                    l2 = l2->next;
+                }
+                prev->next = l1;
             }
         }
-        while(l1){
-            ListNode *newNode = new ListNode(l1->val);
-            temp->next = newNode;
-            temp = temp->next;
-            l1 = l1->next;
-        }
-        while(l2){
-            ListNode *newNode = new ListNode(l2->val);
-            temp->next = newNode;
-            temp = temp->next;
-            l2 = l2->next;
-        }
-        return head->next;
+        if(temp1->val <= temp2->val) return temp1;
+        else return temp2;
     }
 };

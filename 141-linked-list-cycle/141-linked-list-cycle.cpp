@@ -8,13 +8,20 @@
  */
 class Solution {
 public:
+    bool cycle(ListNode *slow, ListNode *fast){
+        if(!fast || !fast->next) return false;
+        if(slow == fast) return true;
+        return cycle(slow->next, fast->next->next);
+    }
     bool hasCycle(ListNode *head) {
-        ListNode *slow = head, *fast = head;
-        while(fast && fast->next){
-            slow = slow->next;
-            fast = fast->next->next;
-            if(slow == fast) return true;
-        }
-        return false;
+        // ListNode *slow = head, *fast = head;
+        // while(fast && fast->next){
+        //     slow = slow->next;
+        //     fast = fast->next->next;
+        //     if(slow == fast) return true;
+        // }
+        // return false;
+        if(head == NULL || head->next == NULL) return false;
+        return cycle(head->next, head->next->next);
     }
 };

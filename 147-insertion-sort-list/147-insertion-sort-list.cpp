@@ -10,25 +10,39 @@
  */
 class Solution {
 public:
-    ListNode* insertionSortList(ListNode* head) {
-        ListNode *d = new ListNode(-1);
-        d->next = head;
-        ListNode *curr = head, *prev = d;
-        while(curr){
-            if(curr->next && curr->val > curr->next->val){
-                while(prev->next && prev->next->val < curr->next->val){
-                    prev = prev->next;
-                }
-                ListNode *temp = prev->next;
-                prev->next = curr->next;
-                curr->next = curr->next->next;
-                prev->next->next = temp;
-                prev = d;
-            }
-            else{
-                curr = curr->next;
-            }
+    ListNode *recurse(ListNode *curr){
+        if(!curr) return curr;
+        curr->next = recurse(curr->next);
+        if(!curr->next) return curr;
+        if(curr->val <= curr->next->val) return curr;
+        ListNode *a = curr, *b = curr->next;
+        while(a->next && a->next->val < curr->val){
+            a = a->next;
         }
-        return d->next;
+        curr->next = a->next;
+        a->next = curr;
+        return b;
+    }
+    ListNode* insertionSortList(ListNode* head) {
+        // ListNode *d = new ListNode(-1);
+        // d->next = head;
+        // ListNode *curr = head, *prev = d;
+        // while(curr){
+        //     if(curr->next && curr->val > curr->next->val){
+        //         while(prev->next && prev->next->val < curr->next->val){
+        //             prev = prev->next;
+        //         }
+        //         ListNode *temp = prev->next;
+        //         prev->next = curr->next;
+        //         curr->next = curr->next->next;
+        //         prev->next->next = temp;
+        //         prev = d;
+        //     }
+        //     else{
+        //         curr = curr->next;
+        //     }
+        // }
+        // return d->next;
+        return recurse(head);
     }
 };

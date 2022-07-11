@@ -10,40 +10,27 @@
  */
 class Solution {
 public:
-    ListNode *merge(ListNode *left, ListNode *right){
-        if(!left) return right;
-        if(!right) return left;
-        ListNode *temp1 = left, *temp2 = right;
-        ListNode *temp = NULL;
-        while(left && right){
-            if(left->val <= right->val){
-                while(left && left->val <= right->val){
-                    temp = left;
-                    left = left->next;
-                }
-                temp->next = right;
-            }
-            else{
-                while(right && right->val <= left->val){
-                    temp = right;
-                    right = right->next;
-                }
-                temp->next = left;
-            }
+    struct cmp{
+        bool operator()(ListNode *l1, ListNode *l2){
+            return l1->val > l2->val;
         }
-        if(temp1->val <= temp2->val) return temp1;
-        else return temp2;
-    }
+    };
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        int n = lists.size();
-        if(n == 0) return NULL;
-        if(n == 1) return lists[0];
-        ListNode *first = lists[0];
-        ListNode *second = lists[1];
-        ListNode *head = merge(first, second);
-        for(int i = 2 ; i < n ; i++){
-            head = merge(head, lists[i]);
+        priority_queue<ListNode *, vector<ListNode*>, cmp> pq;
+        for(auto it : lists){
+            if(it) pq.push(it);
         }
-        return head;
+        if(pq.empty()) return NULL;
+        ListNode *result = pq.top();
+        pq.pop();
+        if(result->next) pq.push(result->next);
+        ListNode *tail = result;
+        while(!pq.empty()){
+            tail->next = pq.top();
+            pq.pop();
+            tail = tail->next;
+            if(tail->next) pq.push(tail->next);
+        }
+        return result;
     }
 };

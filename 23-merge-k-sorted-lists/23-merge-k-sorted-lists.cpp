@@ -24,12 +24,12 @@ public:
         ListNode *result = pq.top();
         pq.pop();
         if(result->next) pq.push(result->next);
-        ListNode *tail = result;
+        ListNode *curr = result;
         while(!pq.empty()){
-            tail->next = pq.top();
+            curr->next = pq.top();
             pq.pop();
-            tail = tail->next;
-            if(tail->next) pq.push(tail->next);
+            curr = curr->next;
+            if(curr->next) pq.push(curr->next);
         }
         return result;
     }

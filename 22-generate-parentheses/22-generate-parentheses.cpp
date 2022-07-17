@@ -1,24 +1,24 @@
 class Solution {
 public:
-    void parenthesis(vector<string> &ans, int open, int close, int n, string temp){
-        if(temp.size() == 2*n){
+    void rec(vector<string> &ans, string temp, int start, int end, int n){
+        if(temp.size() == 2 * n){
             ans.push_back(temp);
         }
-        if(open < n){
+        if(start < n){
             temp.push_back('(');
-            parenthesis(ans, open+1, close, n, temp);
+            rec(ans, temp, start+1, end, n);
             temp.pop_back();
         }
-        if(close < open){
+        if(end < start){
             temp.push_back(')');
-            parenthesis(ans, open, close+1, n, temp);
-            temp.pop_back();
+            rec(ans, temp, start, end + 1, n);
         }
     }
     vector<string> generateParenthesis(int n) {
         vector<string> ans;
-        string temp = "";
-        parenthesis(ans, 0, 0, n, temp);
+        string temp;
+        
+        rec(ans, temp, 0, 0, n);
         return ans;
     }
 };

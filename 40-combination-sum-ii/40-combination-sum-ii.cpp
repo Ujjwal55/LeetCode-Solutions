@@ -1,25 +1,27 @@
 class Solution {
 public:
-    void combination(vector<int> &candidates, vector<int> &temp, vector<vector<int>> &ans, int target, int n, int idx){
-        if(target == 0){
-            ans.push_back(temp);
+    void combination(vector<vector<int>> &ans, vector<int> &temp, vector<int> &nums, int i, int n, int target){
+        if(target < 0) return;
+        if(i == n || target == 0){
+            if(target == 0){
+                ans.push_back(temp);
+            }
             return;
         }
-        
-        for(int i = idx ; i < n ; i++){
-            if(i > idx && candidates[i] == candidates[i-1]) continue;
-            if(candidates[i] > target) break;
-            temp.push_back(candidates[i]);
-            combination(candidates, temp, ans, target-candidates[i], n, i+1);
+        cout<<"h";
+        for(int index = i ; index < n ; index++){
+            if(index > i && nums[index] == nums[index-1]) continue;
+            temp.push_back(nums[index]);
+            combination(ans, temp, nums, index+1, n, target-nums[index]);
             temp.pop_back();
         }
     }
-    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        int n = candidates.size();
-        vector<int> temp;
+    vector<vector<int>> combinationSum2(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
         vector<vector<int>> ans;
-        sort(candidates.begin(), candidates.end());
-        combination(candidates, temp, ans, target, n, 0);
+        vector<int> temp;
+        int n = nums.size();
+        combination(ans, temp, nums, 0, n, target);
         return ans;
     }
 };

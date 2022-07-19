@@ -1,34 +1,23 @@
 class Solution {
 public:
-    void printSubsets(vector<int> &nums, vector<int> &v, vector<vector<int>> &ans, int target, int n, int i){
-        // if(i == n){
-        //     if(target == 0){
-        //         vector<int> t;
-        //         for(auto it: v){
-        //             t.push_back(it);
-        //         }
-        //         ans.push_back(t);
-        //     }
-        //     return;
-        // }
-        if(i == n){
+    void combination(vector<vector<int>> &ans, vector<int> &temp, vector<int> &nums, int i, int n, int target){
+        if(target < 0) return;
+        if(i == n || target == 0){
             if(target == 0){
-                ans.push_back(v);
+                ans.push_back(temp);
             }
             return;
         }
-        if(nums[i] <= target){
-            v.push_back(nums[i]);
-            printSubsets(nums, v, ans, target-nums[i], n, i);
-            v.pop_back();
-        }
-        printSubsets(nums, v, ans, target, n, i+1);
+        temp.push_back(nums[i]);
+        combination(ans, temp, nums, i, n, target-nums[i]);
+        temp.pop_back();
+        combination(ans, temp, nums, i+1, n, target);
     }
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        int n = candidates.size();
-        vector<int> v;
+    vector<vector<int>> combinationSum(vector<int>& nums, int target) {
         vector<vector<int>> ans;
-        printSubsets(candidates, v, ans, target, n, 0);
+        vector<int> temp;
+        int n = nums.size();
+        combination(ans, temp, nums, 0, n, target);
         return ans;
     }
 };

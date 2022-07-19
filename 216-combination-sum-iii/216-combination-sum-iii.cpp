@@ -1,24 +1,23 @@
 class Solution {
 public:
-    void combination(vector<vector<int>> &ans, vector<int> &temp, int k, int n, int idx){
-        if(temp.size() == k){
-            int sum = 0;
-            for(int i = 0 ; i < temp.size() ; i++){
-                sum += temp[i];
+    void combination(vector<vector<int>> &ans, vector<int> &temp, int i, int n, int k){
+        if(n < 0) return;
+        if(i > 9 || n == 0){
+            if(n == 0){
+                if(temp.size() == k) ans.push_back(temp);
             }
-            if(sum == n) ans.push_back(temp);
             return;
         }
-        if(idx > 9) return;
-        temp.push_back(idx);
-        combination(ans, temp, k, n, idx+1);
-        temp.pop_back();
-        combination(ans, temp, k, n, idx+1);
+        for(int index = i ; index <= 9 ; index++){
+            temp.push_back(index);
+            combination(ans, temp, index+1, n-index, k);
+            temp.pop_back();
+        }
     }
     vector<vector<int>> combinationSum3(int k, int n) {
         vector<vector<int>> ans;
         vector<int> temp;
-        combination(ans, temp, k, n, 1);
+        combination(ans, temp, 1, n, k);
         return ans;
     }
 };

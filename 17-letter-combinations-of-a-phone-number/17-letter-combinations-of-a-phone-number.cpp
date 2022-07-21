@@ -1,23 +1,24 @@
 class Solution {
 public:
-    void combination(string digits, int i, string temp, vector<string> &ans, map<char,string> &m){
-        if(temp.size() == digits.size()){
-            ans.push_back(temp);
+    unordered_map<char, string> m;
+    void phoneNumber(vector<string> &ans, string s, string digits, int i){
+        if(s.size() == digits.size()){
+            ans.push_back(s);
             return;
         }
         for(int digit = i ; digit < digits.size() ; digit++){
             char c = digits[digit];
             for(int alphabet = 0 ; alphabet < m[c].size() ; alphabet++){
-                char ch = m[c][alphabet];
-                temp.push_back(ch);
-                combination(digits, digit+1, temp, ans, m);
-                temp.pop_back();
+                s.push_back(m[c][alphabet]);
+                phoneNumber(ans, s, digits, digit+1);
+                s.pop_back();
             }
         }
     }
     vector<string> letterCombinations(string digits) {
         vector<string> ans;
-        map<char, string> m;
+        string s;
+        if(digits.size()== 0) return {};
         m['2'] = "abc";
         m['3'] = "def";
         m['4'] = "ghi";
@@ -26,8 +27,7 @@ public:
         m['7'] = "pqrs";
         m['8'] = "tuv";
         m['9'] = "wxyz";
-        if(digits.size() == 0) return {};
-        combination(digits, 0, "", ans, m);
+        phoneNumber(ans, "", digits, 0);
         return ans;
     }
 };

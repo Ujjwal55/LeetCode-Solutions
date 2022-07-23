@@ -1,23 +1,42 @@
 class Solution {
 public:
+     class cmp{
+        bool operator()(pair<int, vector<int>> &p1, pair<int, vector<int>> &p2){
+            return p1.first > p2.first;
+        }
+     };
     int kthSmallest(vector<vector<int>>& mat, int k) {
+        // priority_queue<pair<int, vector<int>>, vector<pair<int, vector<int>>>, cmp>pq;
+        priority_queue<pair<int, vector<int>>, vector<pair<int, vector<int>>>, greater<pair<int, vector<int>>>> pq;
+        set<vector<int>> s;
         int n = mat.size();
         int m = mat[0].size();
-        vector<int> row = mat[0];
+        int sum = 0;
+        vector<int> temp;
+        for(int i = 0 ; i < n ; i++){
+            sum += mat[i][0];
+            temp.push_back(0);
+        }
+        s.insert(temp);
+        pq.push({sum, temp});
         
-        for(int i = 1 ; i < n ; i++){
-            vector<int> temp;
-            for(int j = 0 ; j < m ; j++){
-                for(auto it : row){
-                    temp.push_back(it+mat[i][j]);
+        while(k--){
+            sum = pq.top().first;
+            temp = pq.top().second;
+            pq.pop();
+            if(!k) return sum;
+            for(int i = 0 ; i < temp.size() ; i++){
+                if(temp[i] + 1 < m){
+                    int curr = sum - mat[i][temp[i]] + mat[i][temp[i] + 1];
+                    temp[i]++;
+                    if(!s.count(temp)){
+                        s.insert(temp);
+                        pq.push({curr, temp});
+                    }
+                    temp[i]--;
                 }
             }
-            sort(temp.begin(), temp.end());
-            row.resize(min(k, int(temp.size())));
-            for(int i = 0 ; i < min(k, int(temp.size())) ; i++){
-                row[i] = temp[i];
-            }
         }
-        return row[k-1];
+        return 0;
     }
 };

@@ -1,48 +1,20 @@
 class Solution {
 public:
-    bool partition(vector<int> &nums, int i, int sum, vector<vector<int>> &dp){
+    bool isSubsetSum(vector<int> &nums, int n, int sum, vector<vector<int>> &dp){
         if(sum == 0) return true;
-        if(sum < 0 || i < 0) return false;
-        if(i == 0){
-            if(sum-nums[i] == 0) return true;
-            return false;
+        if(sum < 0 || n == 0) return false;
+        if(dp[n][sum] != -1) return dp[n][sum];
+        
+        if(nums[n-1] <= sum){
+            return dp[n][sum] = isSubsetSum(nums, n-1, sum-nums[n-1], dp) || isSubsetSum(nums, n-1, sum, dp);
         }
-        if(dp[i][sum] != -1) return dp[i][sum];
-        if(nums[i] <= sum){
-            return dp[i][sum] = partition(nums,i-1,sum-nums[i],dp) || partition(nums,i-1,sum,dp);
-        }
-        return dp[i][sum] = partition(nums, i-1, sum, dp);
-    }
-    bool bottomUp(vector<int> &nums, int sum){
-        int n = nums.size();
-        vector<vector<bool>> dp(n, vector<bool> (sum+1, 0));
-        for(int i = 0 ; i < n ; i++){
-            for(int j = 0 ; j <= sum ; j++){
-                if(i == 0) dp[i][j] = false;
-                if(j == 0) dp[i][j] = true;
-            }
-        }
-        // for(int i = 0 ; i < n ; i++) dp[i][0] = true;
-        // dp[0][nums[0]] = true;
-        for(int i = 1; i < n ; i++){
-            for(int j = 1 ; j <= sum ; j++){
-                if(nums[i] <= j){
-                    dp[i][j] = dp[i-1][j-nums[i]] || dp[i-1][j];
-                }
-                else{
-                    dp[i][j] = dp[i-1][j];
-                }
-            }
-        }
-        return dp[n-1][sum];
+        else return dp[n][sum] = isSubsetSum(nums, n-1, sum, dp);
     }
     bool canPartition(vector<int>& nums) {
         int n = nums.size();
-        int sum = 0;
-        for(int i = 0 ; i < n ; i++) sum += nums[i];
-        vector<vector<int>> dp(n, vector<int> (sum/2+1, -1));
-        if(sum%2 != 0) return false;
-        // return partition(nums, n-1, sum/2, dp);
-        return bottomUp(nums, sum/2);
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if(sum % 2 != 0) return false;
+        vector<vector<int>> dp(n+1, vector<int> (sum/2+1, -1));
+        return isSubsetSum(nums, n, sum/2, dp);
     }
 };

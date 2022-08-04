@@ -1,44 +1,28 @@
 class Solution {
 public:
-    int noOfWays(vector<int> &nums, int target, int n, unordered_map<string, int> &dp){
-        if(n == 0){
-            if(target == 0) return 1;
-            return 0;
+    int findSubset(vector<int> &nums, int sz, int target, vector<vector<int>> &subsets){
+        if(target == 0) return 1;
+        if(target < 0 || sz == 0) return 0;
+        if(subsets[sz][target] != -1) return subsets[sz][target];
+        if(nums[sz-1] <= target){
+            return subsets[sz][target] = findSubset(nums, sz-1, target-nums[sz-1], subsets) + findSubset(nums, sz-1, target, subsets);
         }
-        string key = to_string(n) + " " + to_string(target);
-        if(dp.find(key) != dp.end()) return dp[key];
-        return dp[key] = noOfWays(nums, target-nums[n-1], n-1, dp) + noOfWays(nums, target+nums[n-1], n-1, dp);
-    }
-    int bottomUp(vector<int> &nums, int target, int sum){
-        int n = nums.size();
-        vector<vector<int>> dp(n+1, vector<int> (sum+1, 0));
-        for(int i = 0 ; i <= n ; i++){
-            for(int j = 0 ; j <= sum ; j++){
-               if(i == 0) dp[i][j] = 0;
-               if(j == 0) dp[i][j] = 1; 
-            }
-        }
-        for(int i = 1 ; i <= n ; i++){
-            for(int j = 0 ; j <= sum ; j++){
-                if(nums[i-1] <= j){
-                    dp[i][j] = dp[i-1][j-nums[i-1]] + dp[i-1][j];
-                }
-                else{
-                    dp[i][j] = dp[i-1][j];
-                }
-            }
-        }
-        return dp[n][sum];
+        else return subsets[sz][target] = findSubset(nums, sz-1, target, subsets);
     }
     int findTargetSumWays(vector<int>& nums, int target) {
-        target = abs(target);
         int n = nums.size();
-        // vector<vector<int>> dp(n+1, vector<int> (total+1, -1));
-        unordered_map<string, int> dp;
-        // return noOfWays(nums, target, n, dp);
-        int sum = 0;
-        for(int i = 0 ; i < n ; i++) sum += nums[i];
-        if(sum < target || (sum+target)%2 != 0) return 0;
-        return bottomUp(nums, target, (sum+target)/2);
+        int sum = 0, zero = 0;
+        vector<int> arr;
+        for(int i = 0 ; i < n ; i++){
+            sum += nums[i];
+            if(nums[i] == 0) zero++;
+            else arr.push_back(nums[i]);
+        }
+        int sz = n - zero;
+        int new_target = (sum + target) / 2;
+        if((sum + target) % 2 != 0 || new_target < 0) return 0;
+        vector<vector<int>> subsets(sz+1, vector<int> (new_target+1, -1));
+        
+        return pow(2, zero) * findSubset(arr, sz, new_target, subsets);
     }
 };

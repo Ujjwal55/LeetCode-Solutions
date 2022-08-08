@@ -1,20 +1,17 @@
 class Solution {
 public:
-    int maxWays(vector<int> &coins, int amount, int n, vector<vector<int>> &dp){
-        if(n == 0 || amount == 0){
-            return (amount == 0) ? 1 : 0;
-        }
-        if(dp[n][amount] != -1) return dp[n][amount];
+    int numberofWays(vector<int> &coins, int n, int amount, vector<vector<int>> &combinations){
+        if(amount == 0) return 1;
+        if(n == 0) return 0;
+        if(combinations[n][amount] != -1) return combinations[n][amount];
         if(coins[n-1] <= amount){
-            return dp[n][amount] = maxWays(coins, amount-coins[n-1], n, dp) + maxWays(coins, amount, n-1, dp);
+            return combinations[n][amount] = numberofWays(coins, n, amount-coins[n-1], combinations) + numberofWays(coins, n-1, amount, combinations);
         }
-        else{
-            return dp[n][amount] = maxWays(coins, amount, n-1, dp);
-        }
+        else return combinations[n][amount] = numberofWays(coins, n-1, amount, combinations);
     }
     int change(int amount, vector<int>& coins) {
         int n = coins.size();
-        vector<vector<int>> dp(n+1, vector<int> (amount+1, -1));
-        return maxWays(coins, amount, n, dp);
+        vector<vector<int>> combinations(n+1, vector<int> (amount+1, -1));
+        return numberofWays(coins, n, amount, combinations);
     }
 };

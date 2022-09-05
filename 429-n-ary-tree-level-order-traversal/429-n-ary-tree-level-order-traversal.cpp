@@ -23,7 +23,7 @@ public:
     vector<vector<int>> levelOrder(Node* root) {
         vector<vector<int>> ans;
         queue<Node *> q;
-        if(root == NULL) return ans;
+        if(!root) return ans;
         q.push(root);
         while(!q.empty()){
             int n = q.size();
